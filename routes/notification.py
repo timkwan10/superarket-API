@@ -116,7 +116,7 @@ class SetEmailPromotion(Resource):
 class SetPushEnable(Resource):
     @ns.expect(push_model)
     def post(self):
-        """启用或禁用 Push 通知"""
+        """启用或禁用 Push 通知 """
 
         data = request.json or {}
         user_id = data.get("user_id")
