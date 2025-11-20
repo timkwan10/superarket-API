@@ -296,6 +296,12 @@ class PublishPushNotification(Resource):
         if not users:
             return make_response({"code": 200, "msg": "没有启用 Push 的用户"})
 
+        image_bytes = None
+        image_name = None
+        if image_file:
+            image_bytes = image_file.read()
+            image_name = image_file.filename
+
         notifications = []
         for u in users:
             notif = Notification(
@@ -303,9 +309,9 @@ class PublishPushNotification(Resource):
                 title=title,
                 content=content
             )
-            if image_file:
-                notif.image_data = image_file.read()
-                notif.image_name = image_file.filename
+            if image_bytes:
+                notif.image_data = image_bytes  # 直接使用已读的字节
+                notif.image_name = image_name
 
             db.session.add(notif)
             notifications.append(notif)
@@ -344,6 +350,12 @@ class PublishEmailNotification(Resource):
         if not users:
             return make_response({"code": 200, "msg": "没有启用 Email Promotion 的用户"})
 
+        image_bytes = None
+        image_name = None
+        if image_file:
+            image_bytes = image_file.read()
+            image_name = image_file.filename
+
         notifications = []
         for u in users:
             notif = Notification(
@@ -351,9 +363,9 @@ class PublishEmailNotification(Resource):
                 title=title,
                 content=content
             )
-            if image_file:
-                notif.image_data = image_file.read()
-                notif.image_name = image_file.filename
+            if image_bytes:
+                notif.image_data = image_bytes  # 直接使用已读的字节
+                notif.image_name = image_name
 
             db.session.add(notif)
             notifications.append(notif)
