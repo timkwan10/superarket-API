@@ -12,7 +12,7 @@ class ShoppingCart(db.Model):
         comment="用户ID（外键）"
     )
     product_id = db.Column(
-        db.String(20),  # 假设产品ID也是字符串类型，与用户ID风格保持一致
+        db.String(20),
         nullable=False,
         comment="商品ID"
     )
@@ -22,9 +22,15 @@ class ShoppingCart(db.Model):
         default=1,
         comment="商品数量"
     )
+    price = db.Column(
+        db.Float,
+        nullable=False,
+        default=0.0,
+        comment="商品单价"
+    )
     created_at = db.Column(
         db.DateTime,
-        default=datetime.utcnow, 
+        default=datetime.utcnow,
         nullable=False,
         comment="添加时间"
     )
@@ -43,7 +49,8 @@ class ShoppingCart(db.Model):
     __table_args__ = (
         db.UniqueConstraint("user_id", "product_id", name="uk_user_product"),
         db.CheckConstraint("quantity > 0", name="chk_quantity_positive"),  # 确保数量为正整数
+        db.CheckConstraint("price >= 0", name="chk_price_nonnegative")      # 确保价格非负
     )
 
     def __repr__(self):
-        return f"<ShoppingCart {self.user_id}: {self.product_id} x {self.quantity}>"
+        return f"<ShoppingCart {self.user_id}: {self.product_id} x {self.quantity} @ {self.price}>"
